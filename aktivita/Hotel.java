@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Objekty.Izba;
+import Objekty.Ucastnici;
 
 public class Hotel implements ZlozkaHotel{
 
@@ -10,10 +11,24 @@ public class Hotel implements ZlozkaHotel{
 	private int cisloUctu;
 	private String adresa;
 	private int pocetIzieb=0;
+	private boolean obsadene;
 	List<Izba> izby = new ArrayList<Izba>();
 	
 	public Hotel(String name,String mesto,String ulica,int cislo){
 		menoHotela=name;cisloUctu=cislo; adresa = mesto + "\n"+ ulica;
+	}
+	public int getPocetLozok(){
+		int z = 0;
+		for(Izba i:izby){
+		z += i.getPocetLozok();
+		}
+		return z;
+	}
+	public void priradHosta(List<Ucastnici> u){
+		for(Izba i : izby ){
+			if(i.isObsadene() == false){obsadene = i.priraHosta(u);}
+		}
+		
 	}
 
 	public String getMenoHotela() {
@@ -40,7 +55,7 @@ public class Hotel implements ZlozkaHotel{
 		this.adresa = adresa;
 	}
 	public void priradIzbu(int lozka,int cisloI, double cenaN){
-		Izba izba = new Izba(lozka,cisloI,cenaN);
+		Izba izba = new Izba(lozka,cisloI,cenaN,this);
 		izby.add(izba);
 		pocetIzieb++;
 	}
@@ -53,6 +68,12 @@ public class Hotel implements ZlozkaHotel{
 		List<Hotel> j = new ArrayList<>();
 		j.add(this);
 		return j;
+	}
+	public boolean isObsadene() {
+		return obsadene;
+	}
+	public void setObsadene(boolean obsadene) {
+		this.obsadene = obsadene;
 	}
 	
 }

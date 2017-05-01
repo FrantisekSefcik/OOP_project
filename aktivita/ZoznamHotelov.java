@@ -3,10 +3,36 @@ package aktivita;
 import java.util.ArrayList;
 import java.util.List;
 
+import Objekty.Ucastnici;
+
 public class ZoznamHotelov implements ZlozkaHotel{
 	Hotel hotel;
 	List<ZlozkaHotel> hotely = new ArrayList<>();
 	List<Hotel> HotelyZ;
+	List<Ucastnici> ucastnici;
+	ZoznamSportov sporty;
+	private main main;
+	
+	public ZoznamHotelov(main main) {
+		this.main = main;
+	}
+	
+	public void priradUbytovanie(){
+		HotelyZ = this.dostanHotel();
+		for(Hotel z : HotelyZ ){
+			z.priradHosta(this.neubytovaniU());
+		}
+	}
+	public List<Ucastnici> neubytovaniU(){
+		
+		List<Ucastnici> ucastnicis = new ArrayList<>();
+		for(Ucastnici u: main.getUcastnici()){
+			if(u.isIzbaHas()== false){
+				ucastnicis.add(u);
+			}
+		}
+		return ucastnicis;
+	}
 	
 	public void pridajHotel(String name,String mesto,String ulica,int cislo){
 		hotel = new Hotel(name,mesto,ulica,cislo);
@@ -28,18 +54,19 @@ public class ZoznamHotelov implements ZlozkaHotel{
 	public String vypisHotelov(){
 		String sprava="ZOZNAM HOTELOV\n";
 		for(Hotel z: HotelyZ= dostanHotel()){
-    		sprava += z.getMenoHotela()+" Pocet izieb: "+z.getPocetIzieb()+"\n";
+    		sprava +="|"+ z.getMenoHotela()+"| Pocet izieb: "+z.getPocetIzieb()+" | lozok: "+Integer.toString(z.getPocetLozok())+"\n";
     	}
 		return sprava;
 	}
 	
-	
-	
+		
 	public List<Hotel> dostanHotel() {
 		 List<Hotel> n = new ArrayList<>();
 		for(ZlozkaHotel z: hotely){
 			n.addAll(z.dostanHotel());
 		}		return n;
 	}
+
+	
 
 }

@@ -7,26 +7,35 @@ import Objekty.Sportovci;
 import Objekty.Trener;
 import Objekty.Ucastnici;
 
+//agregacia
+//overloading
+//kontaktne udaje pri pridavani sportu, odoslanie na dalsi stupen , zobrazenie dat
+
 public class main {
 	
 	private int pocetUcastnikov=0;
 	private int pocetSportov=0;
-	Sport novy;
-	private ZoznamHotelov hotel = new ZoznamHotelov();
-	ZoznamSportov sporty = new ZoznamSportov();
+	private ZoznamHotelov hotel = new ZoznamHotelov(this);
+	private ZoznamSportov sporty = new ZoznamSportov(this);
 	private ZoznamDoprava doprava = new ZoznamDoprava();
+	
 	List<Ucastnici> u = new ArrayList<Ucastnici>();
 	List<SledovatelPoctu> sledovatelia = new ArrayList<>();
 	
 	public ZoznamHotelov getHotel(){
 		return hotel;
 	}
-	
 	public ZoznamDoprava getDoprava() {
 		return doprava;
 	}
+	public ZoznamSportov getSporty() {
+		return sporty;
+	}
 	
-	
+	public void incrementPocetUcastnikov(){
+		pocetUcastnikov++;
+	}
+	//sledovatelia Poctu
 	public void pridajSledovatela(SledovatelPoctu sledovatelStavu) {
 		sledovatelia.add(sledovatelStavu);
 	}
@@ -37,81 +46,59 @@ public class main {
 	}
 	
 	
-	public String vytvorSport(String name){			
-		if(sporty.existSport(name)){}else{
-		novy = new Sport();
-		novy.setMeno(name);
-		sporty.pridajSport(novy);
-		pocetSportov++;
-		}
-		return Integer.toString(pocetSportov);
-	}
 	public boolean stavInfo(){
 		return sporty.zistiInfo();
 	}
 	
+	public String vytvorSport(String name,String osoba,String kontakt){			
+			return sporty.vytvorSport(name,osoba,kontakt);
+	}
+	
+	/*
 	public void nastav(String meno, int cena){
 		Trener trener= new Trener(cena,meno);
 		novy.priradTrener(trener);		
-	}
+	}*/
 	
 	public void aktualizuj(String name,int dni,int vzd){
 		sporty.setNazovUdalosti(name);sporty.setPocetDni(dni);sporty.setPocetKm(vzd);
 	};
 	
 	public void vytvorSportovcovS(int pocet,int cena){
-		Sportovci osoba; 
-		for(int i=1;i<=pocet;i++){
-		osoba = new Sportovci();
-			osoba.setMeno("anonym");
-			osoba.setNaklady(cena);
-			novy.priradSportovec(osoba);
-			pocetUcastnikov++;
-		}
+		sporty.vytvorSportovcovS(pocet, cena);
 		upovedomSledovatelov();
 	}
 	
 	public void vytvorSportovcovJ(String name,int cena){
-		Sportovci osoba; 	
-		osoba = new Sportovci();
-			osoba.setMeno(name);
-			osoba.setNaklady(cena);
-			novy.priradSportovec(osoba);
-			pocetUcastnikov++;
+		sporty.vytvorSportovcovJ(name, cena);
 			upovedomSledovatelov();
 	}
 	
 	public void vytvorObsluhuS(int pocet,int cena){
 		 
-		for(int i=1;i<=pocet;i++){
-			novy.priradObsluhu(new Obsluha(cena,"anonym"));
-			pocetUcastnikov++;			
-		}
+		sporty.vytvorObsluhuS(pocet, cena);
 		upovedomSledovatelov();
 	}
 	
 	public void vytvorObsluhuJ(String name,int cena){
-			novy.priradObsluhu(new Obsluha(cena,name));
-			pocetUcastnikov++;
-			upovedomSledovatelov();
+		sporty.vytvorObsluhuJ(name, cena);
 	}
 	public void vytvorTrenera(String name,int cena){
-		novy.priradTrener(new Trener(cena,name));
-		pocetUcastnikov++;
+		sporty.vytvorTrenera(name, cena);
 		upovedomSledovatelov();
 	}
 	public String vypis(){
-		return novy.vypis();
+		return sporty.vypis();
 	}
 	public String vypisS(){
 		return sporty.spravaSport();
 	}
 		
     public boolean vyhladaj(String name){
-    	   	    	return sporty.existSport(name);   	
+    	return sporty.existSport(name);   	
     }
     public void dostanSport(String name){
-    	novy= sporty.vyhladaj(name);
+    	sporty.dostanSport(name);
     }
     
 	public int zistiPocetU() {
@@ -120,5 +107,8 @@ public class main {
 
 	public void setDoprava(ZoznamDoprava doprava) {
 		this.doprava = doprava;
+	}
+	public List<Ucastnici> getUcastnici(){
+		return sporty.vyberUcastnikov();
 	}
 }

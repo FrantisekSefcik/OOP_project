@@ -2,16 +2,38 @@ package Objekty;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Izba {
+import aktivita.Hotel;
 
+public class Izba {
+    
+	private Hotel hotel;
 	private int pocetLozok;
 	private int cisloIzby;
 	private double cenaIzby; 
 	private List<Ucastnici> ubytovani = new ArrayList<>();
 	
-	public Izba(int lozka,int cisloI,double cenaN){
-		pocetLozok=lozka;cisloIzby=cisloI;cenaIzby=cenaN;
+	private int pocetUbytovanych =0;
+	private boolean obsadene = false;
+	
+	public Izba(int lozka,int cisloI,double cenaN,Hotel h){
+		pocetLozok=lozka;cisloIzby=cisloI;cenaIzby=cenaN;setHotel(h);
 	}
+	
+	public boolean priraHosta(List<Ucastnici> u){
+		
+		
+			for(int i=0;obsadene == false && i<u.size();i++){
+				
+				if(u.get(i).isIzbaHas()==false){
+					ubytovani.add(u.get(i));
+					u.get(i).priradIzba(this);
+					pocetUbytovanych++;
+					if(pocetUbytovanych==pocetLozok)obsadene = true;
+				}
+			}
+			return obsadene;
+		}
+	
 
 	public int getPocetLozok() {
 		return pocetLozok;
@@ -35,6 +57,20 @@ public class Izba {
 
 	public void setCenaIzby(double cenaIzby) {
 		this.cenaIzby = cenaIzby;
+	}
+	public boolean isObsadene(){
+		return obsadene;
+	}
+
+	public Hotel getHotel() {
+		return hotel;
+	}
+
+	public void setHotel(Hotel hotel) {
+		this.hotel = hotel;
+	}
+	public String getMenoHotela(){
+		return hotel.getMenoHotela();
 	}
 	
 }

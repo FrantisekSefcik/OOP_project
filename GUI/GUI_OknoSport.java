@@ -13,11 +13,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import aktivita.PocetUcastnikov;
+import aktivita.ZoznamSportov;
 import aktivita.main;
 
 public class GUI_OknoSport extends Stage {
 
     private main main;
+    private ZoznamSportov zoznamSportov;
+    private PocetUcastnikov pocetUcast;
     
     private Button sportovec;
 	private Button trener;
@@ -53,6 +56,7 @@ public class GUI_OknoSport extends Stage {
 	private Label popis_o1;
 	private Label popis_o2;
 	private Label hlavny_slb;
+	private Label infoKontakt;
 	
 	private TextField pocet_s;
 	private TextField cena_s;
@@ -60,6 +64,8 @@ public class GUI_OknoSport extends Stage {
 	private TextField cena_s2;
 	private TextField cena_t;
 	private TextField meno_t;
+	private TextField kontaktnaOsoba;
+	private TextField kontakt;
 	private TextField cena;
 	private TextField pocet;
 	private TextField zabezpecenie;
@@ -76,6 +82,8 @@ public class GUI_OknoSport extends Stage {
 	private ScrollPane skrolVypis_o = new ScrollPane(vypis_o);
 	private TextArea vypis_hsp = new TextArea();
 	private ScrollPane skrolVypis_hsp = new ScrollPane(vypis_hsp);
+	private TextArea vypis = new TextArea();
+	private ScrollPane skrolVypis = new ScrollPane(vypis);
     
     Scene scene3,scene_s,scene_t,scene_o,scene1;
     
@@ -83,6 +91,7 @@ public class GUI_OknoSport extends Stage {
 		super();
 		main=a;
 		setTitle("Sporty");
+		zoznamSportov = main.getSporty();
 		
 		vypis_hsp.appendText(main.vypisS());
 		//initModality(APPLICATION_MODAL);
@@ -97,14 +106,22 @@ public class GUI_OknoSport extends Stage {
 	    grid_h.add(hlavny_s = new TextField(),1,0);
 	    grid_h.add(vypis_hsp,2,0);
 	    vypis_hsp.setMaxSize(250, 100);
-	    grid_h.add(ubytovanie= new Button("Dokonc"), 0, 2);
+	    grid_h.add(ubytovanie= new Button("Aktualizuj data"), 0, 2);
+	    pocetUcast= new PocetUcastnikov(main);
+		pocetUcast.setText("0");
+		main.pridajSledovatela(pocetUcast);
+		grid_h.add(pocetUcast,2,1);
 		
 		//naplnenie sportu
         VBox layout3 = new VBox(10);
+        layout3.getChildren().add(infoKontakt = new Label("Kontaktne udaje"));
+        layout3.getChildren().add(kontaktnaOsoba = new TextField(zoznamSportov.getKontaktnaOsoba()));
+		layout3.getChildren().add(kontakt = new TextField(zoznamSportov.getKontakt()));
 		layout3.getChildren().add(sportovec = new Button("pridaj sportovec"));
 		layout3.getChildren().add(trener = new Button("pridaj trener"));
 		layout3.getChildren().add(obsluha = new Button("pridaj obsluha"));
-		layout3.getChildren().add(end_vypln = new Button("dokonc"));
+		layout3.getChildren().add(end_vypln = new Button("Dokonc"));
+		layout3.getChildren().add(vypis);
 		
 		//naplnenie sportovec
 		GridPane grid = new GridPane();
@@ -117,7 +134,7 @@ public class GUI_OknoSport extends Stage {
 	    grid.add(pocet_s = new TextField(), 1,1);
 	    grid.add(cena_slb = new Label("Naklady os. :"),0,2);
 	    grid.add(cena_s = new TextField(), 1,2);
-	    grid.add(pridaj_s1 = new Button("pridaj vsetkych"), 1,3);
+	    grid.add(pridaj_s1 = new Button("Pridaj vsetkych"), 1,3);
 	    ///pridaj jednotlivca
 	    grid.add(popis2= new Label("Pridaj jednotlivca:"),1,4);
 	    grid.add(meno_slb = new Label("Meno sportovca :"),0,5);
@@ -126,7 +143,7 @@ public class GUI_OknoSport extends Stage {
 	    grid.add(cena_s2 = new TextField(), 1,6);
 	    grid.add(pridaj_s2 = new Button("pridaj jednotlivca"), 1,7);
 	    
-	    grid.add(dokonc_s = new Button("dokonc"), 0,8);
+	    grid.add(dokonc_s = new Button("Ddokonc"), 0,8);
 	    grid.add(vypis_s, 1,9);
 	    
 	    /////naplnenie trener
@@ -168,6 +185,7 @@ public class GUI_OknoSport extends Stage {
 		///buttons
 	    hlavny_napln.setOnAction(e->{
 	    	if(main.vyhladaj(hlavny_s.getText())){this.setScene(scene3);main.dostanSport(hlavny_s.getText());}
+	    	vypis.clear();			vypis.appendText(main.vypis());
 	    });
 	    
 	    pridaj_s1.setOnAction(e->{main.vytvorSportovcovS(Integer.parseInt(pocet_s.getText().toString()), 
@@ -181,7 +199,7 @@ public class GUI_OknoSport extends Stage {
 		vypis_s.clear();
 		vypis_s.appendText(main.vypis());
 		});
-		dokonc_s.setOnAction(e->this.setScene(scene3));
+		dokonc_s.setOnAction(e->{this.setScene(scene3);vypis.clear();			vypis.appendText(main.vypis());});
 		
 		end_vypln.setOnAction(e-> {this.setScene(scene1);vypis_hsp.clear();vypis_hsp.appendText(main.vypisS());});
 		
@@ -191,7 +209,7 @@ public class GUI_OknoSport extends Stage {
 		
 		pridaj_t1.setOnAction(e-> main.vytvorTrenera(meno_t.getText().toString(),Integer.parseInt(cena_t.getText())));
 		
-		dokonc_t.setOnAction(e-> this.setScene(scene3));
+		dokonc_t.setOnAction(e-> {this.setScene(scene3);vypis.clear();			vypis.appendText(main.vypis());});
 		
 		obsluha.setOnAction(e-> this.setScene(scene_o));
 		
@@ -207,8 +225,8 @@ public class GUI_OknoSport extends Stage {
 		vypis_o.appendText(main.vypis());
 			});
 		
-		dokonc_o.setOnAction(e-> this.setScene(scene3));
-		ubytovanie.setOnAction(e-> new GUI_OknoUbytovanie(main));
+		dokonc_o.setOnAction(e-> {this.setScene(scene3);vypis.clear();			vypis.appendText(main.vypis());});
+		ubytovanie.setOnAction(e->{ vypis_hsp.clear();vypis_hsp.appendText(main.vypisS());});
 		/////Buttons
 		///////////////////////////////////////////
 		

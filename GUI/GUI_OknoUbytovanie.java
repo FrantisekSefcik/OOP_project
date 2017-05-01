@@ -2,6 +2,7 @@ package GUI;
 
 import aktivita.PocetUcastnikov;
 import aktivita.ZoznamHotelov;
+import aktivita.ZoznamSportov;
 import aktivita.main;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,12 +11,14 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class GUI_OknoUbytovanie extends Stage {
 	private main main;
 	private PocetUcastnikov pocetUcast;
 	private ZoznamHotelov hotels;
+	private ZoznamSportov sports;
 	
 	private Button pridaj_h;
 	private Button pridaj_h2;
@@ -23,6 +26,8 @@ public class GUI_OknoUbytovanie extends Stage {
 	private Button pridajIzbu_h;
 	private Button pridaj_i;
 	private Button end_i;
+	private Button ubytuj_h;
+	private Button vypis_hlavny;
 	
 	private TextField meno_h;
 	private TextField cislou_h;
@@ -43,13 +48,18 @@ public class GUI_OknoUbytovanie extends Stage {
 	
 	private TextArea vypis_h = new TextArea();
 	private ScrollPane skrolVypis_h = new ScrollPane(vypis_h);
+	private TextArea vypis_s = new TextArea();
+	private ScrollPane skrolVypis_s = new ScrollPane(vypis_s);
+	private TextArea vypis = new TextArea();
+	private ScrollPane skrolVypis = new ScrollPane(vypis);
 	
-	private Scene scene1,scene_h,scene_i;
+	private Scene scene1,scene_h,scene_i,scene_v;
 	
 	public GUI_OknoUbytovanie(main main){
 		super();
 		this.main = main;
-		hotels = main.getHotel();		
+		hotels = main.getHotel();
+		sports = main.getSporty();
 		setTitle("Ubytovanie");
 		
 		///hlavny 
@@ -60,9 +70,17 @@ public class GUI_OknoUbytovanie extends Stage {
 			    grid_h.add(pridaj_h = new Button("Pridaj Hotel"), 0, 0);
 			    pocetUcast = new PocetUcastnikov(main);
 			    main.pridajSledovatela(pocetUcast);
-			    grid_h.add(pocetUcast, 1, 1);
+			    grid_h.add(pocetUcast, 2, 1);
 			    grid_h.add(vypis_h,2,0);
+			    vypis_h.setText("Ziadne dostupne hotely");
 			    vypis_h.setMaxSize(250, 100);
+			    grid_h.add(vypis_s,3,0);
+			    vypis_s.setMaxSize(250, 100);
+			    vypis_s.setText(sports.spravaSHotel());	
+			    grid_h.add(ubytuj_h = new Button("Prirad ubytovanie") ,3,2);
+			    grid_h.add(vypis_hlavny = new Button("Vypis"), 0, 4);
+			    
+			    
 			    
 			   ////Hotel
 			    GridPane grid_hotel = new GridPane();
@@ -96,17 +114,26 @@ public class GUI_OknoUbytovanie extends Stage {
 			    grid_izba.add(pridaj_i = new Button("pridaj izbu"), 1,4);
 			    grid_izba.add(end_i = new Button("dokonc"), 1,5);
 			    
+			    VBox ubytovanie = new VBox(2);
+                ubytovanie.getChildren().add(vypis);
+			    
+			    
+			   
+			    
 			    
 			    ////////////////////////////////////////////////////////////////////////////////////
 			    //////Buttons
 			    pridaj_h.setOnAction(e-> this.setScene(scene_h));
 			    pridaj_h2.setOnAction(e-> {if(hotels.existHotel(meno_h.getText())){}else{hotels.pridajHotel(meno_h.getText(), adresa_m.getText(), adresa_u.getText(), Integer.parseInt(cislou_h.getText()));
 			    adresa_m.clear();adresa_u.clear();cislou_h.clear();}});
-			    end_h.setOnAction(e-> {this.setScene(scene1);vypis_h.setText(hotels.vypisHotelov());});
+			    end_h.setOnAction(e-> {this.setScene(scene1);vypis_h.setText(hotels.vypisHotelov());vypis_s.clear();vypis_s.setText(sports.spravaSHotel());});
 			    pridajIzbu_h.setOnAction(e->{if(hotels.existHotel(meno_h.getText())){hotels.vyhladajHotel(meno_h.getText());this.setScene(scene_i);}});
 			    pridaj_i.setOnAction(e->{ hotels.pridajIzbu(Integer.parseInt(lozka_i.getText()), Integer.parseInt(cislo_i.getText()), Double.parseDouble(cena_i.getText()));
 			    cislo_i.clear();});
 			    end_i.setOnAction(e-> this.setScene(scene_h));
+			    ubytuj_h.setOnAction(e-> {hotels.priradUbytovanie();vypis_s.clear();vypis_s.setText(sports.spravaSHotel());});
+			    vypis_hlavny.setOnAction(e->{this.setScene(scene_v);vypis.setText(sports.vypisHotel());});
+			    
 			    
 			    /////Buttons
 			    ///////////////////////////////////////////////////////////////////////////////////
@@ -114,7 +141,7 @@ public class GUI_OknoUbytovanie extends Stage {
 				scene1 = new Scene(grid_h,600,600);
 				scene_h = new Scene(grid_hotel,600,600);
 				scene_i = new Scene(grid_izba,600,600);
-				
+				scene_v = new Scene(ubytovanie,600,600);
 				setScene(scene1);
 				show();
 	}

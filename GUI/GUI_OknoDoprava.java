@@ -92,7 +92,7 @@ public class GUI_OknoDoprava extends Stage {
 		pridaj_s2.setOnAction(e->{if(doprava.vyhladajSpolocnost(meno_s.getText())){			
 		                         }else{doprava.pridajSpolocnost(meno_s.getText(), Integer.parseInt(cislou_s.getText()));cislou_s.clear();}});
 		pridajProstriedok_s.setOnAction(e->{if(doprava.vyhladajSpolocnost(meno_s.getText())){setScene(scene_p);} });
-		pridaj_p.setOnAction(e->{ doprava.pridajProstriedok(comboBox.toString(), meno_p.getText(), Integer.parseInt(miesta_p.getText()),  Integer.parseInt(cena_p.getText()));});
+		pridaj_p.setOnAction(e->{ doprava.pridajProstriedok(comboBox.getSelectionModel().getSelectedItem().toString(), meno_p.getText(), Integer.parseInt(miesta_p.getText()),  Integer.parseInt(cena_p.getText()));});
 		///Buttons
 		////////////////////////////////////////////////////////////////////
 	    

@@ -28,6 +28,8 @@ import javafx.scene.*;
 		private TextField pocetdni;
 		private TextField sporty_i;
 		private TextField nazovakcie;
+		private TextField kontaktnaOsoba;
+		private TextField kontakt;
 		
 		private Label meno_sportulb;
 		private Label label1;
@@ -55,8 +57,8 @@ import javafx.scene.*;
 	    	main_layout.setPadding(new Insets(10, 20, 10, 20));
 	    	
 			main_layout.add(button1= new Button("Aktualizuj Informacie"),0,0);
-			main_layout.add(label1= new Label("Pocet sportovcov: "),1,0);
 			pocetUcast= new PocetUcastnikov(main);
+			pocetUcast.setText("Pocet ucastnikov >> 0");
 			main.pridajSledovatela(pocetUcast);
 			main_layout.add(pocetUcast, 2, 0);
 			main_layout.add(dokonc= new Button("Dokonc"),0,1);
@@ -82,6 +84,10 @@ import javafx.scene.*;
 			VBox layout2 = new VBox(10);
 			layout2.getChildren().add(meno_sportulb = new Label("Nazov sportu :"));
 			layout2.getChildren().add(meno_sportu = new TextField());
+			layout2.getChildren().add(kontaktnaOsoba = new TextField("Andrej Maurery"));
+			kontaktnaOsoba.setPromptText("Kontaktná osoba");
+			layout2.getChildren().add(kontakt = new TextField("0944283219 / maurery@gmail.com"));
+			kontakt.setPromptText("kontakt: tel.cis/email");
 			layout2.getChildren().add(button_pridaj = new Button("pridaj"));
 			layout2.getChildren().add(spat_s = new Button("Spat"));
 			
@@ -91,8 +97,8 @@ import javafx.scene.*;
 			pridaj_s.setOnAction(e->window.setScene(scene3));
 			spat_s.setOnAction(e-> window.setScene(scene2));
 			aktualizuj.setOnAction(e-> main.aktualizuj(nazovakcie.getText(),Integer.parseInt(pocetdni.getText()), Integer.parseInt(vzdialenost.getText())));
-			button_pridaj.setOnAction(e->{if(main.vyhladaj(meno_sportu.getText())){}else{ sporty_i.setText( main.vytvorSport(meno_sportu.getText())); 
-			                              meno_sportu.clear();} });
+			button_pridaj.setOnAction(e->{if(main.vyhladaj(meno_sportu.getText())){}else{ sporty_i.setText( main.vytvorSport(meno_sportu.getText(),kontaktnaOsoba.getText(),kontakt.getText())); 
+			                              meno_sportu.clear();kontakt.clear();kontaktnaOsoba.clear();} });
 			spat_i.setOnAction(e-> window.setScene(scene1));
 			dokonc.setOnAction(e->{ if(main.stavInfo()){new GUI_OknoSport(main);new GUI_OknoUbytovanie(main);new GUI_OknoDoprava(main);}
 			});

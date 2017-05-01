@@ -13,7 +13,7 @@ public class PocetUcastnikov extends TextField implements SledovatelPoctu{
 	
 	public void upovedom() {
 		pocet = main.zistiPocetU();
-		setText(Integer.toString(pocet));
+		setText("Pocet ucastnikov >> "+Integer.toString(pocet));
 	}
 
 }
