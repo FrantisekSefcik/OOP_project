@@ -21,6 +21,8 @@ public class Sport implements ZlozkaSport{
 	private boolean stavObsluha=false;
 	private boolean stavTrener=false;
 	private boolean stavUbytovanie=false;
+	private boolean stavDopravaTo=false;
+	private boolean stavDopravaFrom=false;
 	
 	
 	///constructors
@@ -79,6 +81,36 @@ public class Sport implements ZlozkaSport{
 		String sprava = meno_Sportu + " T:"+trener.size()+" S:"+sportovec.size()+" O:"+ obsluha.size()+ " | "+ n;
 		return sprava;
 	}
+	public String spravaD(){
+		String n;		
+		int i = trener.size()+ sportovec.size()+ obsluha.size();
+		if(stavDopravaTo==true&&stavDopravaFrom==true){n="OK";}else if(stavDopravaTo==true||stavDopravaFrom==true){n="To or From";}else{n="NO";}
+		String sprava = meno_Sportu +  " |Pocet: "+ Integer.toString(i)+" |"+n;
+		return sprava;
+	}
+	public String spravaDP(){
+		String n;		
+		int tam = this.zistiPocetTam();
+		int nas = this.zistiPocetNaspat();
+		if(tam==0&&nas==0){n="OK";}else{n=Integer.toString(tam)+" | "+Integer.toString(nas);}
+		
+		String sprava = meno_Sportu +  " >>|tam-spat: "+n;
+		return sprava;
+	}
+	public int zistiPocetTam(){
+		int i=0;
+		for (Ucastnici u:this.getUcastnici()) {
+			if(u.isStavCestaTam()==false)i++;
+			}
+		return i;
+	}
+	public int zistiPocetNaspat(){
+		int i=0;
+		for (Ucastnici u:this.getUcastnici()) {
+			if(u.isStavCestaNaspat()==false)i++;
+			}
+		return i;
+	}
 	public int pocetUbytovanych(){
 		int i=0;
 		for(Sportovci s:sportovec){
@@ -96,11 +128,11 @@ public class Sport implements ZlozkaSport{
 	public String vypisHotel(){
 		String sprava="";
 		List<Ucastnici> u = this.getUcastnici();
-		sprava += "\n";
+		sprava += meno_Sportu+"\n";
 		for (Ucastnici i:u) {
 		sprava+= i.vypisHotel();
 		}		
-		return sprava;
+		return sprava+"-----------------------------------------------------------\n";
 	}
 	
 	public String spravaH(){
@@ -120,9 +152,9 @@ public class Sport implements ZlozkaSport{
 	
 	public List<Ucastnici> getUcastnici() {
 		List<Ucastnici> u = new ArrayList<Ucastnici>();
-		u.addAll(sportovec);
-		u.addAll(obsluha);
 		u.addAll(trener);
+		u.addAll(obsluha);
+		u.addAll(sportovec);
 		
 		return u;
 	}

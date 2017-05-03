@@ -11,9 +11,6 @@ import Objekty.Ucastnici;
 public class ZoznamSportov {
 	
 	private List<ZlozkaSport> zlozky = new ArrayList<>();
-	private String nazovUdalosti="";
-	private int pocetDni= 0;
-	private int pocetKm= 0;
 	private int pocetSportov=0;
 	private Sport novy;
 	private main main;
@@ -21,34 +18,14 @@ public class ZoznamSportov {
 	public ZoznamSportov(main main){
 		this.main=main;
 	}
-	public boolean zistiInfo(){
-		if(pocetDni != 0 && pocetKm != 0 && pocetSportov != 0 && !nazovUdalosti.isEmpty()){return true;}else{return false;}
-	}
 	
-	public int getPocetDni() {
-		return pocetDni;
-	}
-	public void setPocetDni(int pocetDni) {
-		this.pocetDni = pocetDni;
-	}
-	public int getPocetKm() {
-		return pocetKm;
-	}
-	public void setPocetKm(int pocetKm) {
-		this.pocetKm = pocetKm;
-	}
 	public int getPocetSportov() {
 		return pocetSportov;
 	}
 	public void setPocetSportov(int pocetSportov) {
 		this.pocetSportov = pocetSportov;
 	}
-	public String getNazovUdalosti() {
-		return nazovUdalosti;
-	}
-	public void setNazovUdalosti(String nazovUdalosti) {
-		this.nazovUdalosti = nazovUdalosti;
-	}
+	
 
 	public String spravaSport(){
 		String sprava = "ZOZNAM SPORTOV\n";
@@ -61,6 +38,20 @@ public class ZoznamSportov {
 		String sprava = "ZOZNAM SPORTOV\n";
 		for(ZlozkaSport z: zlozky){
     		sprava+= z.spravaH()+"\n";
+    	}
+		return sprava;
+	} 
+	public String spravaSDoprava(){
+		String sprava = "ZOZNAM SPORTOV\n";
+		for(ZlozkaSport z: zlozky){
+    		sprava+= z.spravaD()+"\n";
+    	}
+		return sprava;
+	} 
+	public String spravaDopravaP(){
+		String sprava = "ZOZNAM SPORTOV\n";
+		for(ZlozkaSport z: zlozky){
+    		sprava+= z.spravaDP()+"\n";
     	}
 		return sprava;
 	} 
@@ -80,6 +71,7 @@ public class ZoznamSportov {
 	
 	public void pridajSport(ZlozkaSport sport){
 		zlozky.add(sport);
+		main.incrementPocetSportov();
 	}
     public List<ZlozkaSport> vyberSporty(){
     	return zlozky;
@@ -160,7 +152,7 @@ public class ZoznamSportov {
 		return novy.getKontakt();
 	}
 	public String vypisHotel(){
-		String sprava = "      Ubytovanie";
+		String sprava = "      Ubytovanie\n-----------------------------------------------------------\n";
 		for(ZlozkaSport z: zlozky){
     		sprava+= z.vypisHotel()+"\n";
     	}

@@ -10,5 +10,7 @@ String getMeno();
 String spravaS();
 String spravaH();
 String vypisHotel();
+String spravaD();
+String spravaDP();
 
 }

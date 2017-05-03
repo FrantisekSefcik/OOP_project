@@ -115,8 +115,8 @@ public class GUI_OknoSport extends Stage {
 		//naplnenie sportu
         VBox layout3 = new VBox(10);
         layout3.getChildren().add(infoKontakt = new Label("Kontaktne udaje"));
-        layout3.getChildren().add(kontaktnaOsoba = new TextField(zoznamSportov.getKontaktnaOsoba()));
-		layout3.getChildren().add(kontakt = new TextField(zoznamSportov.getKontakt()));
+        layout3.getChildren().add(kontaktnaOsoba = new TextField());
+		layout3.getChildren().add(kontakt = new TextField());
 		layout3.getChildren().add(sportovec = new Button("pridaj sportovec"));
 		layout3.getChildren().add(trener = new Button("pridaj trener"));
 		layout3.getChildren().add(obsluha = new Button("pridaj obsluha"));
@@ -131,9 +131,9 @@ public class GUI_OknoSport extends Stage {
 	    ///pridaj skupinu		    
 	    grid.add(popis1= new Label("Pridaj vsetkych:"),1,0);
 	    grid.add(pocet_slb = new Label("Pocet sportovcov :"),0,1);
-	    grid.add(pocet_s = new TextField(), 1,1);
+	    grid.add(pocet_s = new TextField("10"), 1,1);
 	    grid.add(cena_slb = new Label("Naklady os. :"),0,2);
-	    grid.add(cena_s = new TextField(), 1,2);
+	    grid.add(cena_s = new TextField("99"), 1,2);
 	    grid.add(pridaj_s1 = new Button("Pridaj vsetkych"), 1,3);
 	    ///pridaj jednotlivca
 	    grid.add(popis2= new Label("Pridaj jednotlivca:"),1,4);
@@ -153,9 +153,9 @@ public class GUI_OknoSport extends Stage {
 	    grid_t.setPadding(new Insets(10, 20, 10, 20));
 	    grid_t.add(popist1= new Label("Pridaj Trenera:"),1,0);
 	    grid_t.add(meno_tlb = new Label("Meno trenera :"),0,1);
-	    grid_t.add(meno_t = new TextField(), 1,1);
+	    grid_t.add(meno_t = new TextField("Jano"), 1,1);
 	    grid_t.add(cena_tlb = new Label("Naklady os. :"),0,2);
-	    grid_t.add(cena_t = new TextField(), 1,2);
+	    grid_t.add(cena_t = new TextField("111"), 1,2);
 	    grid_t.add(pridaj_t1 = new Button("pridaj trenera"), 1,3);
 	    grid_t.add(dokonc_t = new Button("dokonc"), 0,4);
 	    
@@ -167,9 +167,9 @@ public class GUI_OknoSport extends Stage {
 	    ///pridaj skupinu		    
 	    grid_o.add(popis_o1= new Label("Pridaj vsetkych:"),1,0);
 	    grid_o.add(pocet_olb = new Label("Pocet Obsluhy :"),0,1);
-	    grid_o.add(pocet_o = new TextField(), 1,1);
+	    grid_o.add(pocet_o = new TextField("5"), 1,1);
 	    grid_o.add(cena_olb = new Label("Naklady os. :"),0,2);
-	    grid_o.add(cena_o = new TextField(), 1,2);
+	    grid_o.add(cena_o = new TextField("100"), 1,2);
 	    grid_o.add(pridaj_o1 = new Button("pridaj vsetkych"), 1,3);
 	    ///pridaj jednotlivca
 	    grid_o.add(popis_o2= new Label("Pridaj jednotlivca:"),1,4);
@@ -185,7 +185,7 @@ public class GUI_OknoSport extends Stage {
 		///buttons
 	    hlavny_napln.setOnAction(e->{
 	    	if(main.vyhladaj(hlavny_s.getText())){this.setScene(scene3);main.dostanSport(hlavny_s.getText());}
-	    	vypis.clear();			vypis.appendText(main.vypis());
+	    	vypis.clear();			vypis.appendText(main.vypis()); kontaktnaOsoba.setText(zoznamSportov.getKontaktnaOsoba()); kontakt.setText(zoznamSportov.getKontakt());
 	    });
 	    
 	    pridaj_s1.setOnAction(e->{main.vytvorSportovcovS(Integer.parseInt(pocet_s.getText().toString()), 

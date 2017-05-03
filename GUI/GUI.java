@@ -4,6 +4,7 @@ import javax.imageio.ImageTypeSpecifier;
 
 import aktivita.PocetUcastnikov;
 import aktivita.main;
+import aktivita.parametreExceptions;
 import javafx.application.*;
 import javafx.geometry.Insets;
 import javafx.scene.*;
@@ -30,6 +31,10 @@ import javafx.scene.*;
 		private TextField nazovakcie;
 		private TextField kontaktnaOsoba;
 		private TextField kontakt;
+		private TextField datum1;
+		private TextField datum2;
+		private TextField zakladna;
+		
 		
 		private Label meno_sportulb;
 		private Label label1;
@@ -74,16 +79,23 @@ import javafx.scene.*;
 			info_layout.add(pridaj_s = new Button("Pridaj sporty"), 0, 3);
 			info_layout.add(sporty_i = new TextField("Pocet : 0"), 1, 3);
 			info_layout.add(vzdialenostlb = new Label("Vzdialenost v km: "), 0, 1);
-			info_layout.add(pocetdnilb = new Label("Pocet dni : "), 0, 2);
+			info_layout.add(pocetdnilb = new Label("Miesto konania : "), 0, 2);
 			info_layout.add(vzdialenost = new TextField("100"), 1, 1);
-			info_layout.add(pocetdni = new TextField("100"), 1, 2);
+			info_layout.add(datum1 = new TextField("10/12/2017"), 2, 0);
+			datum1.setPromptText("Odchod dd/mm/rrrr");
+			info_layout.add(datum2 = new TextField("12/12/2017"), 2, 1);
+			datum2.setPromptText("Prichod dd/mm/rrrr");
+			info_layout.add(pocetdni = new TextField("Budapest"), 1, 2);
+			info_layout.add(zakladna = new TextField("Namestovo"), 2, 2);
+			zakladna.setPromptText("Zadaj miesto odjazadu");
 			info_layout.add(aktualizuj = new Button("Aktualizuj"), 0, 4);
 			info_layout.add(spat_i = new Button("Spat"), 0, 5);
+			
 				
 			//vlozenie sportu
 			VBox layout2 = new VBox(10);
 			layout2.getChildren().add(meno_sportulb = new Label("Nazov sportu :"));
-			layout2.getChildren().add(meno_sportu = new TextField());
+			layout2.getChildren().add(meno_sportu = new TextField("Futbal"));
 			layout2.getChildren().add(kontaktnaOsoba = new TextField("Andrej Maurery"));
 			kontaktnaOsoba.setPromptText("Kontaktná osoba");
 			layout2.getChildren().add(kontakt = new TextField("0944283219 / maurery@gmail.com"));
@@ -93,12 +105,19 @@ import javafx.scene.*;
 			
 		    ///////////////////////////////////////////////////////////////////////////////////////
 			///buttons
-			button1.setOnAction(e-> window.setScene(scene2));
+			button1.setOnAction( e-> window.setScene(scene2));
 			pridaj_s.setOnAction(e->window.setScene(scene3));
 			spat_s.setOnAction(e-> window.setScene(scene2));
-			aktualizuj.setOnAction(e-> main.aktualizuj(nazovakcie.getText(),Integer.parseInt(pocetdni.getText()), Integer.parseInt(vzdialenost.getText())));
-			button_pridaj.setOnAction(e->{if(main.vyhladaj(meno_sportu.getText())){}else{ sporty_i.setText( main.vytvorSport(meno_sportu.getText(),kontaktnaOsoba.getText(),kontakt.getText())); 
-			                              meno_sportu.clear();kontakt.clear();kontaktnaOsoba.clear();} });
+			//pouzitie vlastnej vynimky 
+			aktualizuj.setOnAction(e->{
+				try{main.aktualizuj(nazovakcie.getText(),pocetdni.getText(),datum1.getText(),datum2.getText(),
+					Integer.parseInt(vzdialenost.getText()),zakladna.getText());
+					}catch(parametreExceptions ex){
+						new GUI_error("Nespravny format datumu alebo vzdialenost");
+					}});
+			
+			button_pridaj.setOnAction(e->{if(main.vyhladaj(meno_sportu.getText())){}else{ sporty_i.setText( main.vytvorSport(meno_sportu.getText(),
+					                 kontaktnaOsoba.getText(),kontakt.getText())); meno_sportu.clear();kontakt.clear();kontaktnaOsoba.clear();} });
 			spat_i.setOnAction(e-> window.setScene(scene1));
 			dokonc.setOnAction(e->{ if(main.stavInfo()){new GUI_OknoSport(main);new GUI_OknoUbytovanie(main);new GUI_OknoDoprava(main);}
 			});

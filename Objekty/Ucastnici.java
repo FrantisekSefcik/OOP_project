@@ -4,6 +4,10 @@ package Objekty;
 public abstract class Ucastnici {
 	
 	private Izba izba;
+	private Cesta cestaTam;
+	private Cesta cestaNaspat;
+	private boolean stavCestaTam;
+	private boolean stavCestaNaspat;
 	private boolean izbaHas;
 	private String meno;
 	private int naklady = 0;
@@ -45,9 +49,49 @@ public abstract class Ucastnici {
 		naklady=cena;
 	}
 	public String vypisHotel(){
+		
 		String sprava="";
+		try{
 		sprava+="Meno : "+meno+"| Hotel: "+izba.getMenoHotela()+"| Izba: "+Integer.toString(izba.getCisloIzby())+"\n";
 		return sprava;
+		}catch (Exception e) {
+			sprava+="Meno : "+meno+"   >>Nepriradene ubytovanie!"+"\n";
+			return sprava;
+		}
+	}
+
+	public boolean isStavCestaTam() {
+		return stavCestaTam;
+	}
+
+	public void setStavCestaTam(boolean stavCestaTam) {
+		this.stavCestaTam = stavCestaTam;
+	}
+
+	public boolean isStavCestaNaspat() {
+		return stavCestaNaspat;
+	}
+
+	public void setStavCestaNaspat(boolean stavCestaNaspat) {
+		this.stavCestaNaspat = stavCestaNaspat;
+	}
+
+	public Cesta getCestaNaspat() {
+		return cestaNaspat;
+	}
+
+	public void setCestaNaspat(Cesta cestaNaspat) {
+		this.cestaNaspat = cestaNaspat;
+		setStavCestaNaspat(true);
+	}
+
+	public Cesta getCestaTam() {
+		return cestaTam;
+	}
+
+	public void setCestaTam(Cesta cestaTam) {
+		this.cestaTam = cestaTam;
+		setStavCestaTam(true);
 	}
 		
 }

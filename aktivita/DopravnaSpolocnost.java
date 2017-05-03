@@ -13,9 +13,19 @@ public class DopravnaSpolocnost {
 	private int cisloUctu;
 	private List<DopravneProstriedky> prostriedky = new ArrayList<>();
 	
-	
+	public boolean vyhladajProstriedok(String name){
+		for(DopravneProstriedky p : prostriedky){
+			if(p.getMenoProstriedku().equals(name)){return true;}
+		}
+		return false;
+	}
+	public void sparuj(Sport sport,String name,String druh){
+		for(DopravneProstriedky p : prostriedky){
+			if(p.getMenoProstriedku().equals(name)){p.sparuj(sport, druh);}
+		}
+	}
 	public DopravnaSpolocnost(String name,int cislo){
-		this.setMenoS(name);this.cisloUctu = cislo;
+		this.setMenoS(name); this.cisloUctu = cislo;
 	}
 	
 	public List<DopravneProstriedky> getProstriedky() {
@@ -37,6 +47,33 @@ public class DopravnaSpolocnost {
 	public void setMenoS(String menoS) {
 		this.menoS = menoS;
 	}
-	
+	public String spravaSpolocnosti(){
+		String sprava = menoS+"\n";
+		int i=0;
+		for(DopravneProstriedky j: prostriedky){
+			sprava+= j.spravaProstriedok();
+			i+=j.getPocetMiest();
+			
+		}
+		
+		return sprava+ "pocet miest celkovo : "+ Integer.toString(i)+"\n";
+	}
+	public String spravaParovanie(){
+		String sprava = "";
+		int i=0;
+		for(DopravneProstriedky j: prostriedky){
+			sprava+= j.spravaParovanie();
+						
+		}
+		
+		return sprava;
+	}
+	public int pocetProstriedkov(){
+		int i=0;
+		for(DopravneProstriedky j: prostriedky){
+			i++;
+		}
+		return i;
+	}
 
 }

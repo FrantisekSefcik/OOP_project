@@ -28,6 +28,7 @@ public class GUI_OknoUbytovanie extends Stage {
 	private Button end_i;
 	private Button ubytuj_h;
 	private Button vypis_hlavny;
+	private Button spat_v;
 	
 	private TextField meno_h;
 	private TextField cislou_h;
@@ -45,6 +46,9 @@ public class GUI_OknoUbytovanie extends Stage {
 	private Label lozka_ilb;
 	private Label cislo_ilb;
 	private Label cena_ilb;
+	private Label miesto;
+	private Label prichod;
+	private Label odchod;
 	
 	private TextArea vypis_h = new TextArea();
 	private ScrollPane skrolVypis_h = new ScrollPane(vypis_h);
@@ -77,8 +81,11 @@ public class GUI_OknoUbytovanie extends Stage {
 			    grid_h.add(vypis_s,3,0);
 			    vypis_s.setMaxSize(250, 100);
 			    vypis_s.setText(sports.spravaSHotel());	
-			    grid_h.add(ubytuj_h = new Button("Prirad ubytovanie") ,3,2);
-			    grid_h.add(vypis_hlavny = new Button("Vypis"), 0, 4);
+			    grid_h.add(ubytuj_h = new Button("Prirad ubytovanie") ,3,1);
+			    grid_h.add(vypis_hlavny = new Button("Vypis"), 3, 2);
+			    grid_h.add(miesto = new Label("Miesto konania: "+main.getMiestoKonania()) ,2,2);
+			    grid_h.add(prichod = new Label("Od "+main.getDatum1()) ,2,3);
+			    grid_h.add(odchod = new Label("Do "+main.getDatum2()) ,2,4);
 			    
 			    
 			    
@@ -116,6 +123,7 @@ public class GUI_OknoUbytovanie extends Stage {
 			    
 			    VBox ubytovanie = new VBox(2);
                 ubytovanie.getChildren().add(vypis);
+                ubytovanie.getChildren().add(spat_v = new Button("spat"));
 			    
 			    
 			   
@@ -133,12 +141,13 @@ public class GUI_OknoUbytovanie extends Stage {
 			    end_i.setOnAction(e-> this.setScene(scene_h));
 			    ubytuj_h.setOnAction(e-> {hotels.priradUbytovanie();vypis_s.clear();vypis_s.setText(sports.spravaSHotel());});
 			    vypis_hlavny.setOnAction(e->{this.setScene(scene_v);vypis.setText(sports.vypisHotel());});
+			    spat_v.setOnAction(e->{this.setScene(scene1);});
 			    
 			    
 			    /////Buttons
 			    ///////////////////////////////////////////////////////////////////////////////////
 			    
-				scene1 = new Scene(grid_h,600,600);
+				scene1 = new Scene(grid_h,700,600);
 				scene_h = new Scene(grid_hotel,600,600);
 				scene_i = new Scene(grid_izba,600,600);
 				scene_v = new Scene(ubytovanie,600,600);
