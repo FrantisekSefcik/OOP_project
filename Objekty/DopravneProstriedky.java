@@ -22,6 +22,13 @@ public abstract class DopravneProstriedky {
 	    cestaNaspat = new Cesta(this);
 	}
 	
+	public double getSuma(int pocetKm){
+		double sum=0;
+		if(cestaTam.isFree()==false)sum+=pocetKm*cenaKM;
+		if(cestaNaspat.isFree()==false)sum+=pocetKm*cenaKM;
+		return sum;
+	}
+	
 	//metoda pridelenia sportovcov do dopravneho prostriedku, zistuje o aku cestu sa jedna ci tam alebo spiatocnu
 	//zavola funkciu pridelenia v triede cesta
     public void sparuj(Sport sport,String druh){
@@ -39,9 +46,15 @@ public abstract class DopravneProstriedky {
     }
 	
 	//sprava o parametroch prostriedku
+    // pouzite prekonavanie, v druhej metode je metoda prekonana parametrom pocetKM
 	public String spravaProstriedok(){
 		String sprava="";
 		sprava+="|"+ this.getTypS(this)+"| "+menoProstriedku+" |"+ Integer.toString(pocetMiest)+"\n";
+		return sprava;
+	}
+	public String spravaProstriedok(int pocetKm){
+		String sprava="";
+		sprava+="|"+ this.getTypS(this)+"| "+menoProstriedku+" | Suma: "+ Double.toString(this.getSuma(pocetKm))+"$\n";
 		return sprava;
 	}
 	

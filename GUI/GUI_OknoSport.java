@@ -37,6 +37,7 @@ public class GUI_OknoSport extends Stage {
 	private Button dokonc_o;
 	private Button hlavny_napln;
 	private Button ubytovanie;
+	private Button schval;
 	
 	private Label pocet_slb;
 	private Label cena_slb;
@@ -75,6 +76,7 @@ public class GUI_OknoSport extends Stage {
 	private TextField cena_o2;
 	private TextField text1;
 	private TextField hlavny_s;
+	private TextField sprava;
 	
 	private TextArea vypis_s = new TextArea();
 	private ScrollPane skrolVypis_s = new ScrollPane(vypis_s);
@@ -111,6 +113,8 @@ public class GUI_OknoSport extends Stage {
 		pocetUcast.setText("0");
 		main.pridajSledovatela(pocetUcast);
 		grid_h.add(pocetUcast,2,1);
+		grid_h.add(sprava =new TextField("Stav neznamy"),2,2);
+		grid_h.add(schval = new Button("Schval"),2,3);
 		
 		//naplnenie sportu
         VBox layout3 = new VBox(10);
@@ -143,7 +147,7 @@ public class GUI_OknoSport extends Stage {
 	    grid.add(cena_s2 = new TextField(), 1,6);
 	    grid.add(pridaj_s2 = new Button("pridaj jednotlivca"), 1,7);
 	    
-	    grid.add(dokonc_s = new Button("Ddokonc"), 0,8);
+	    grid.add(dokonc_s = new Button("Dokonc"), 0,8);
 	    grid.add(vypis_s, 1,9);
 	    
 	    /////naplnenie trener
@@ -184,49 +188,69 @@ public class GUI_OknoSport extends Stage {
 	    ///////////////////////////////////////////////////////////////////////////////////////
 		///buttons
 	    hlavny_napln.setOnAction(e->{
-	    	if(main.vyhladaj(hlavny_s.getText())){this.setScene(scene3);main.dostanSport(hlavny_s.getText());}
-	    	vypis.clear();			vypis.appendText(main.vypis()); kontaktnaOsoba.setText(zoznamSportov.getKontaktnaOsoba()); kontakt.setText(zoznamSportov.getKontakt());
+	    	if(zoznamSportov.existSport(hlavny_s.getText())){this.setScene(scene3);zoznamSportov.dostanSport(hlavny_s.getText());}
+	    	vypis.clear();			vypis.appendText(zoznamSportov.vypis()); kontaktnaOsoba.setText(zoznamSportov.getKontaktnaOsoba()); kontakt.setText(zoznamSportov.getKontakt());
 	    });
 	    
-	    pridaj_s1.setOnAction(e->{main.vytvorSportovcovS(Integer.parseInt(pocet_s.getText().toString()), 
+	    pridaj_s1.setOnAction(e->{try{zoznamSportov.vytvorSportovcovS(Integer.parseInt(pocet_s.getText().toString()), 
 				Integer.parseInt(cena_s.getText().toString()));
 		vypis_s.clear();
-		vypis_s.appendText(main.vypis());
+		vypis_s.appendText(zoznamSportov.vypis());
+	    }catch(Exception xe){
+			new GUI_error("Nespravny vstup");
+		}
 		});
 		
-		pridaj_s2.setOnAction(e->{main.vytvorSportovcovJ(meno_s.getText().toString(), 
+		pridaj_s2.setOnAction(e->{try{zoznamSportov.vytvorSportovcovJ(meno_s.getText().toString(), 
 				Integer.parseInt(cena_s2.getText().toString()));
 		vypis_s.clear();
-		vypis_s.appendText(main.vypis());
+		vypis_s.appendText(zoznamSportov.vypis());
+		}catch(Exception xe){
+			new GUI_error("Nespravny vstup");
+		}
 		});
-		dokonc_s.setOnAction(e->{this.setScene(scene3);vypis.clear();			vypis.appendText(main.vypis());});
+		dokonc_s.setOnAction(e->{this.setScene(scene3);vypis.clear();			vypis.appendText(zoznamSportov.vypis());});
 		
-		end_vypln.setOnAction(e-> {this.setScene(scene1);vypis_hsp.clear();vypis_hsp.appendText(main.vypisS());});
+		end_vypln.setOnAction(e-> {this.setScene(scene1);vypis_hsp.clear();vypis_hsp.appendText(main.vypisS());
+		                         if(zoznamSportov.isSplnene()){sprava.setText("Splnene");}else{sprava.setText("Nesplnene");}
+		});
 		
 		sportovec.setOnAction(e-> this.setScene(scene_s));
 		
 		trener.setOnAction(e-> this.setScene(scene_t));
 		
-		pridaj_t1.setOnAction(e-> main.vytvorTrenera(meno_t.getText().toString(),Integer.parseInt(cena_t.getText())));
+		pridaj_t1.setOnAction(e-> {try{zoznamSportov.vytvorTrenera(meno_t.getText().toString(),Integer.parseInt(cena_t.getText()));
+		}catch(Exception xe){
+			new GUI_error("Nespravny vstup");
+		}});
 		
-		dokonc_t.setOnAction(e-> {this.setScene(scene3);vypis.clear();			vypis.appendText(main.vypis());});
+		dokonc_t.setOnAction(e-> {this.setScene(scene3);vypis.clear();			vypis.appendText(zoznamSportov.vypis());});
 		
 		obsluha.setOnAction(e-> this.setScene(scene_o));
 		
-		pridaj_o1.setOnAction(e->{ main.vytvorObsluhuS(Integer.parseInt(pocet_o.getText().toString()), 
+		pridaj_o1.setOnAction(e->{ try{zoznamSportov.vytvorObsluhuS(Integer.parseInt(pocet_o.getText().toString()), 
 				Integer.parseInt(cena_o.getText().toString()));
 		vypis_o.clear();
-		vypis_o.appendText(main.vypis());
+		vypis_o.appendText(zoznamSportov.vypis());
+		}catch(Exception xe){
+			new GUI_error("Nespravny vstup");
+		}
+		
 			});
 		
-		pridaj_o2.setOnAction(e->{main.vytvorObsluhuJ(meno_o.getText().toString(), 
+		pridaj_o2.setOnAction(e->{try{zoznamSportov.vytvorObsluhuJ(meno_o.getText().toString(), 
 				Integer.parseInt(cena_o2.getText().toString()));
 		vypis_o.clear();
-		vypis_o.appendText(main.vypis());
+		vypis_o.appendText(zoznamSportov.vypis());}catch(Exception xe){
+			new GUI_error("Nespravny vstup");
+		}
 			});
 		
-		dokonc_o.setOnAction(e-> {this.setScene(scene3);vypis.clear();			vypis.appendText(main.vypis());});
-		ubytovanie.setOnAction(e->{ vypis_hsp.clear();vypis_hsp.appendText(main.vypisS());});
+		dokonc_o.setOnAction(e-> {this.setScene(scene3);vypis.clear();			vypis.appendText(zoznamSportov.vypis());});
+		ubytovanie.setOnAction(e->{ vypis_hsp.clear();vypis_hsp.appendText(main.vypisS());
+		                        if(zoznamSportov.isSplnene()){sprava.setText("Splnene");}else{sprava.setText("Nesplnene");}});
+		schval.setOnAction(e->{if(zoznamSportov.isSplnene()){ if(zoznamSportov.isSchvalSport()){this.close();}else{zoznamSportov.setCakam(true);sprava.setText("Cakam na schvalenie");}
+		                       }else{ new GUI_error("Neboli este splnene poziadavky");}});
 		/////Buttons
 		///////////////////////////////////////////
 		

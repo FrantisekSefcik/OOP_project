@@ -33,6 +33,14 @@ public class Sport implements ZlozkaSport{
 		this.setKontakt(kontakt);
 	}
 	
+	public double getSum(){
+		double sum=0;
+		for (Ucastnici u:this.getUcastnici()) {
+			sum+=u.getNaklady();
+			}
+		return sum;
+	}
+	
 	public void setMeno(String name){
 		this.meno_Sportu= name;
 	}
@@ -42,11 +50,13 @@ public class Sport implements ZlozkaSport{
 	public void priradTrener(Trener tren){		
 		trener.add(tren);
 		stavTrener=true;
+		if(stavSport == true && stavObsluha == true && stavTrener == true){ stavNaplnene=true;}
 	}
 	
 	public void priradSportovec(Sportovci osoba){
 		sportovec.add(osoba);
 		stavSport=true;
+		if(stavSport == true && stavObsluha == true && stavTrener == true){ stavNaplnene=true;}
 	}
 	public ArrayList<Sportovci> vyberSportovcov(){
 		return sportovec;
@@ -61,8 +71,9 @@ public class Sport implements ZlozkaSport{
 	public String vypis(){
 		String sprava = meno_Sportu+"\n"+ "_____________________________________________________\n";
 		sprava += "Trener : \n";
+		int m=1;
 		for (int i = 0; i < trener.size(); i++) {
-		sprava+= trener.get(i).getMeno() + "  Naklady  : " + trener.get(i).getNaklady() + "$\n";
+		sprava+=trener.get(i).getMeno() + "  Naklady  : " + trener.get(i).getNaklady() + "$\n";
 		}
 		sprava += "Sportovci : \n";
 		for (int i = 0; i < sportovec.size(); i++) {
@@ -74,11 +85,36 @@ public class Sport implements ZlozkaSport{
 		}
 				return sprava;
 	}
+	public String celkovyVypis(){
+		String sprava = meno_Sportu+"\n"+ "_____________________________________________________\n";
+		sprava += "Trener : \n";
+		for (Trener t: trener) {
+		sprava+=t.celkovyVypis();
+		}
+		sprava += "Sportovci : \n";
+		for (Sportovci s : sportovec) {
+			sprava+=s.celkovyVypis();
+		}
+		sprava+="Obsluha : \n";
+		for (Obsluha o : obsluha) {
+			sprava+= o.celkovyVypis();
+		}
+				return sprava;
+	   }
 	public String spravaS(){
 		String n;
 		
 		if(stavNaplnene==true){n="OK";}else{n="Nenaplnene";}
 		String sprava = meno_Sportu + " T:"+trener.size()+" S:"+sportovec.size()+" O:"+ obsluha.size()+ " | "+ n;
+		return sprava;
+	}
+	public String financieVypis(){		
+		String sprava = meno_Sportu + " | Kontakt: "+kontakt+" | Suma : " + Double.toString(this.getSum())+"$\n";
+		return sprava;
+	}
+	public String financieVypis(String s){		
+		String sprava =" | Kontakt: "+kontakt+" | Suma : " + Double.toString(this.getSum())+"$\n";
+		sprava += this.vypis();
 		return sprava;
 	}
 	public String spravaD(){
@@ -175,5 +211,25 @@ public class Sport implements ZlozkaSport{
 	public void setKontakt(String kontakt) {
 		this.kontakt = kontakt;
 	}
+	public boolean isNaplnene(){
+		return stavNaplnene;
+	}
+	public boolean isStavUbytovanie(){
+		for (Ucastnici u:this.getUcastnici()) {
+			if(u.isIzbaHas()==false){stavUbytovanie = false; return false;}
+			}
+		stavUbytovanie = true; return true; 
+	}
+	public boolean isStavCesta(){
+		stavDopravaTo=true;
+		stavDopravaFrom=true;
+		for (Ucastnici u:this.getUcastnici()) {
+			if(u.isStavCestaTam()==false){stavDopravaTo=false;}
+			if(u.isStavCestaNaspat()==false){stavDopravaFrom=false;}
+			}
+		 if(stavDopravaFrom==true && stavDopravaTo==true){return true;}
+		 return false;
+	}
+	
 
 }

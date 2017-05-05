@@ -12,5 +12,11 @@ String spravaH();
 String vypisHotel();
 String spravaD();
 String spravaDP();
-
+double getSum();
+String celkovyVypis();
+String financieVypis();
+String financieVypis(String s);
+boolean isNaplnene();
+boolean isStavUbytovanie();
+boolean isStavCesta();
 }

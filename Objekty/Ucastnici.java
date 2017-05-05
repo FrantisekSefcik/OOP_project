@@ -23,6 +23,17 @@ public abstract class Ucastnici {
 		this.setNaklady(naklady);
 		this.meno= name;
 	}
+	public String celkovyVypis(){
+		String sprava="";
+		try{
+		sprava+="Meno: "+ this.getMeno() + "   | Hotel: "+ izba.getMenoHotela() + ". è.izby : "+Integer.toString(izba.getCisloIzby())
+		+"   | Preprava tam-spat:"+ cestaTam.getMenoProstriedku()+"-"+cestaNaspat.getMenoProstriedku()+"\n";
+		}catch(Exception e){
+			sprava+="Meno: "+ this.getMeno() + " Procesy pridelenia neboli dokoncene!\n";
+		}
+		return sprava;
+		
+	}
 
 	public boolean isIzbaHas() {
 		return izbaHas;

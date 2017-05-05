@@ -75,5 +75,26 @@ public class DopravnaSpolocnost {
 		}
 		return i;
 	}
+	public double getSuma(int pocetKm){
+		double sum=0;
+		for(DopravneProstriedky j: prostriedky){
+			sum+=j.getSuma(pocetKm);
+		}
+		return sum;
+	}
+	public String financieVypis(int pocetKm){
+		   String sprava="";
+		   sprava+="Meno : "+menoS+"  | Cislo uctu: "+Integer.toString(cisloUctu)+"  | Suma: "+ Double.toString(getSuma(pocetKm))+"\n";
+		   return sprava;
+	   }
+	public String financieVypis(int pocetKm,String m){
+		   String sprava="";
+		   sprava+="Meno : "+menoS+"  | Cislo uctu: "+Integer.toString(cisloUctu)+"  | Suma: "+ Double.toString(getSuma(pocetKm))+"\n";
+		   for(DopravneProstriedky j: prostriedky){
+				sprava+="    "+ j.spravaProstriedok(pocetKm);
+							
+			}
+		   return sprava;
+	   }
 
 }

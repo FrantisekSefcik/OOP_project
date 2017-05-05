@@ -23,6 +23,11 @@ import javafx.scene.*;
 		private Button aktualizuj;
 		private Button spat_i;
 		private Button spat_s;
+		private Button vypisy;
+		private Button vypis_v;
+		private Button spat_v;
+		private Button schval;
+		private Button akt;
 		
 		private TextField meno_sportu; 
 		private TextField vzdialenost;
@@ -34,6 +39,7 @@ import javafx.scene.*;
 		private TextField datum1;
 		private TextField datum2;
 		private TextField zakladna;
+		private TextField suma;
 		
 		
 		private Label meno_sportulb;
@@ -42,10 +48,15 @@ import javafx.scene.*;
 		private Label pocetdnilb;
 		private Label nazovakcielb;
 		
+		private TextArea vypis = new TextArea();
+		private ScrollPane skrolVypis = new ScrollPane(vypis);
+		private TextArea vypis2 = new TextArea();
 		
+		ComboBox<String> comboBox;
+		ComboBox<String> comboBox2;
 		private PocetUcastnikov pocetUcast;
 		
-		Scene scene1,scene2,scene3;
+		Scene scene1,scene2,scene3,scene_v;
 		Stage window;
 		   @Override
 		   
@@ -65,9 +76,17 @@ import javafx.scene.*;
 			pocetUcast= new PocetUcastnikov(main);
 			pocetUcast.setText("Pocet ucastnikov >> 0");
 			main.pridajSledovatela(pocetUcast);
-			main_layout.add(pocetUcast, 2, 0);
-			main_layout.add(dokonc= new Button("Dokonc"),0,1);
-			
+			main_layout.add(pocetUcast, 1, 0);
+			main_layout.add(dokonc= new Button("Posun dalej"),0,1);
+			main_layout.add(vypisy= new Button("Vypisy"),0,2);
+			main_layout.add(suma= new TextField( "Financne prostriedky"),1,1);
+			main_layout.add(comboBox2 = new ComboBox<>(),2,0);
+		    comboBox2.getItems().addAll("Ubytovanie","Sporty","Doprava");
+		    main_layout.add(schval= new Button("Schval"),2,1);
+			vypis2.setMaxSize(400, 80);
+			main_layout.add(vypis2,2,2);
+			vypis2.appendText(main.sprava());
+			main_layout.add(akt= new Button("Aktualizuj"),2,3);
 			///informacie
 			GridPane info_layout = new GridPane();
 			info_layout.setHgap(3);
@@ -103,11 +122,20 @@ import javafx.scene.*;
 			layout2.getChildren().add(button_pridaj = new Button("pridaj"));
 			layout2.getChildren().add(spat_s = new Button("Spat"));
 			
+			//vypisy
+			VBox box =new VBox(5);
+			box.getChildren().add(comboBox = new ComboBox<>());
+		    comboBox.getItems().addAll("Celkovy vypis","Ubytovanie","Naklady vypis","Naklady detailny vypis");
+			box.getChildren().add(vypis_v = new Button("Vypis"));
+			box.getChildren().add(vypis);
+			box.getChildren().add(spat_v = new Button("Spat"));
+			
 		    ///////////////////////////////////////////////////////////////////////////////////////
 			///buttons
 			button1.setOnAction( e-> window.setScene(scene2));
 			pridaj_s.setOnAction(e->window.setScene(scene3));
 			spat_s.setOnAction(e-> window.setScene(scene2));
+			
 			//pouzitie vlastnej vynimky 
 			aktualizuj.setOnAction(e->{
 				try{main.aktualizuj(nazovakcie.getText(),pocetdni.getText(),datum1.getText(),datum2.getText(),
@@ -118,15 +146,21 @@ import javafx.scene.*;
 			
 			button_pridaj.setOnAction(e->{if(main.vyhladaj(meno_sportu.getText())){}else{ sporty_i.setText( main.vytvorSport(meno_sportu.getText(),
 					                 kontaktnaOsoba.getText(),kontakt.getText())); meno_sportu.clear();kontakt.clear();kontaktnaOsoba.clear();} });
-			spat_i.setOnAction(e-> window.setScene(scene1));
+			spat_i.setOnAction(e-> {window.setScene(scene1);suma.setText("Suma: "+Double.toString(main.getSuma())+"$");
+			                        vypis2.clear();vypis2.appendText(main.sprava());});
 			dokonc.setOnAction(e->{ if(main.stavInfo()){new GUI_OknoSport(main);new GUI_OknoUbytovanie(main);new GUI_OknoDoprava(main);}
 			});
+			vypisy.setOnAction(e->window.setScene(scene_v));
+			spat_v.setOnAction(e->window.setScene(scene1));
+			vypis_v.setOnAction(e->{vypis.clear();vypis.appendText(main.hlavnyVypis(comboBox.getSelectionModel().getSelectedItem().toString()));});
+			akt.setOnAction(e-> {vypis2.clear();vypis2.appendText(main.sprava());});
+			schval.setOnAction(e->main.schval(comboBox2.getSelectionModel().getSelectedItem().toString()));
 			////buttons
 			//////////////////////////////////////////////////////////////////////////////////////////
-			
-			scene3 = new Scene(layout2,600,600);
-			scene2 = new Scene(info_layout,600,600);
-			scene1 = new Scene(main_layout,600,600);
+			scene_v= new Scene(box,800,600);
+			scene3 = new Scene(layout2,800,600);
+			scene2 = new Scene(info_layout,800,600);
+			scene1 = new Scene(main_layout,800,600);
 			
 			window.setScene(scene1);
 			window.show();

@@ -75,5 +75,24 @@ public class Hotel implements ZlozkaHotel{
 	public void setObsadene(boolean obsadene) {
 		this.obsadene = obsadene;
 	}
+	public double getSuma(int pocetDni){
+		double sum=0;
+		for(Izba i : izby ){
+			if(i.isFree() == false){sum+=i.getSuma(pocetDni);}
+		}
+		return sum;
+	}
+	public String financieVypis(int pocetDni){
+		   String sprava="Meno hotela: "+menoHotela + " Cislo uctu: "+ cisloUctu+"  | Suma: "+ Double.toString(getSuma(pocetDni))+"$\n"+" | Adresa: "+ adresa+"\n";
+		   
+		   return sprava;
+	   }
+	public String financieVypis(int pocetDni,String m){
+		   String sprava="Meno hotela: "+menoHotela + " Cislo uctu: "+ cisloUctu+"  | Suma: "+ Double.toString(getSuma(pocetDni))+"$\n"+" | Adresa: "+ adresa+"\n";
+		   for(Izba i : izby ){
+				sprava+=i.sprava(pocetDni);
+			}
+		   return sprava;
+	   }
 	
 }

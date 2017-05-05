@@ -14,6 +14,10 @@ public class ZoznamSportov {
 	private int pocetSportov=0;
 	private Sport novy;
 	private main main;
+	private boolean schvalSport;
+	private boolean schvalUbytovanie;
+	private boolean schvalDoprava;
+	private boolean cakam;
 	
 	public ZoznamSportov(main main){
 		this.main=main;
@@ -26,6 +30,32 @@ public class ZoznamSportov {
 		this.pocetSportov = pocetSportov;
 	}
 	
+	public double getSuma(){
+		double sum=0;
+		for(ZlozkaSport z: zlozky){
+    		sum +=z.getSum();
+    	}
+		return sum;
+	}
+	
+	public boolean isSplnene(){
+		for(ZlozkaSport z: zlozky){
+    		if(z.isNaplnene()==false){return false;}
+    	}
+		return true;
+	}
+	public boolean isUbytovanieSplnene(){
+		for(ZlozkaSport z: zlozky){
+    		if(z.isStavUbytovanie()==false){return false;}
+    	}
+		return true;
+	}
+	public boolean isDopravaSplnene(){
+		for(ZlozkaSport z: zlozky){
+    		if(z.isStavCesta()==false){return false;}
+    	}
+		return true;
+	}
 
 	public String spravaSport(){
 		String sprava = "ZOZNAM SPORTOV\n";
@@ -90,7 +120,28 @@ public class ZoznamSportov {
     	}
     	return jednotka;
     }
-
+    
+   public String celkovyVypis(){
+	   String sprava="";
+	   for(ZlozkaSport z: zlozky){
+   		sprava+= z.celkovyVypis()+"\n";
+   	}
+	   return sprava;
+   }
+   public String financieVypis(){
+	   String sprava="Sporty:\n";
+	   for(ZlozkaSport z: zlozky){
+   		sprava+= z.financieVypis();
+   	}
+	   return sprava;
+   }
+   public String financieVypis(String s){
+	   String sprava="Sporty:\n";
+	   for(ZlozkaSport z: zlozky){
+   		sprava+= z.financieVypis(s);
+   	}
+	   return sprava;
+   }
 	
 	/////////////////////////////////////
 	public void vytvorSportovcovS(int pocet,int cena){
@@ -101,6 +152,7 @@ public class ZoznamSportov {
 			osoba.setNaklady(cena);
 			novy.priradSportovec(osoba);
 			main.incrementPocetUcastnikov();
+			main.upovedomSledovatelov();
 		}
 	}
 	
@@ -111,23 +163,27 @@ public class ZoznamSportov {
 			osoba.setNaklady(cena);
 			novy.priradSportovec(osoba);
 			main.incrementPocetUcastnikov();
+			main.upovedomSledovatelov();
 	}
 	
 	public void vytvorObsluhuS(int pocet,int cena){
 		 
 		for(int i=1;i<=pocet;i++){
 			novy.priradObsluhu(new Obsluha(cena,"anonym"));
-			main.incrementPocetUcastnikov();		
+			main.incrementPocetUcastnikov();	
+			main.upovedomSledovatelov();
 		}
 	}
 	
 	public void vytvorObsluhuJ(String name,int cena){
 			novy.priradObsluhu(new Obsluha(cena,name));
 			main.incrementPocetUcastnikov();
+			main.upovedomSledovatelov();
 	}
 	public void vytvorTrenera(String name,int cena){
 		novy.priradTrener(new Trener(cena,name));
 		main.incrementPocetUcastnikov();
+		main.upovedomSledovatelov();
 	}
 	public String vypis(){
 		return novy.vypis();
@@ -157,6 +213,38 @@ public class ZoznamSportov {
     		sprava+= z.vypisHotel()+"\n";
     	}
 		return sprava;
+	}
+
+	public boolean isCakam() {
+		return cakam;
+	}
+
+	public void setCakam(boolean cakam) {
+		this.cakam = cakam;
+	}
+
+	public boolean isSchvalSport() {
+		return schvalSport;
+	}
+
+	public void setSchvalSport(boolean schvalSport) {
+		this.schvalSport = schvalSport;
+	}
+
+	public boolean isSchvalUbytovanie() {
+		return schvalUbytovanie;
+	}
+
+	public void setSchvalUbytovanie(boolean schvalUbytovanie) {
+		this.schvalUbytovanie = schvalUbytovanie;
+	}
+
+	public boolean isSchvalDoprava() {
+		return schvalDoprava;
+	}
+
+	public void setSchvalDoprava(boolean schvalDoprava) {
+		this.schvalDoprava = schvalDoprava;
 	}
 	
 }

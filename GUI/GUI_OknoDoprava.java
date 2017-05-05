@@ -33,6 +33,7 @@ public class GUI_OknoDoprava extends Stage {
 	Button sparuj_h;
 	Button end_d;
 	Button prirad_d;
+	Button schval;
 	
 	TextField meno_s;
 	TextField cislou_s;
@@ -41,6 +42,7 @@ public class GUI_OknoDoprava extends Stage {
 	TextField cena_p;
 	TextField prostriedok_d;
 	TextField sport_d;
+	TextField sprava;
 	
 	Label popis_s1;
 	Label meno_slb;
@@ -95,6 +97,8 @@ public class GUI_OknoDoprava extends Stage {
 	    grid_h.add(odchod = new Label("Odchod "+main.getDatum2()) ,2,5);
 	    grid_h.add(vzdialenost = new Label("Vzdialenost: "+Integer.toString(main.getPocetKm())) ,2,6);
 	    grid_h.add(sparuj_h = new Button("Sparuj spojenia"), 0, 1);
+	    grid_h.add(sprava = new TextField("Nesplnene"), 1, 3);
+	    grid_h.add(schval = new Button("Schval"), 1, 4);
 	    
 	////spolocnost
 	    GridPane grid_s = new GridPane();
@@ -160,9 +164,12 @@ public class GUI_OknoDoprava extends Stage {
 				                  meno_p.getText(), Integer.parseInt(miesta_p.getText()),  Integer.parseInt(cena_p.getText()));});
 		end_p.setOnAction(e->{this.setScene(scene_s);vypis_s.clear();vypis_s.setText(sporty.spravaSDoprava());});
 		sparuj_h.setOnAction(e->{this.setScene(scene_d);vypis_ds.appendText(doprava.spravaParovanie());vypis_d.appendText(sporty.spravaDopravaP());});
-		end_d.setOnAction(e-> this.setScene(scene1));
+		end_d.setOnAction(e-> {this.setScene(scene1);
+		                       if(sporty.isDopravaSplnene()){sprava.setText("Stav :Splnene");}else{sprava.setText("Stav: Nesplnene");} });
 		prirad_d.setOnAction(e->{doprava.sparuj(prostriedok_d.getText(),sport_d.getText(), comboBox2.getSelectionModel().getSelectedItem().toString());
 		                         vypis_d.clear();vypis_ds.clear();vypis_ds.appendText(doprava.spravaParovanie());vypis_d.appendText(sporty.spravaDopravaP());});
+		schval.setOnAction(e->{if(sporty.isDopravaSplnene()){if(sporty.isSchvalDoprava()){this.close();}else{doprava.setCakam(true);sprava.setText("Cakam na schvalenie");}
+		                       }else{ new GUI_error("Neboli este splnene poziadavky");}});
 		///Buttons
 		////////////////////////////////////////////////////////////////////
 	    

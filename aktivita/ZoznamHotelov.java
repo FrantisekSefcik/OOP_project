@@ -1,6 +1,7 @@
 package aktivita;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import Objekty.Ucastnici;
@@ -12,6 +13,7 @@ public class ZoznamHotelov implements ZlozkaHotel{
 	List<Ucastnici> ucastnici;
 	ZoznamSportov sporty;
 	private main main;
+	private boolean cakam;
 	
 	public ZoznamHotelov(main main) {
 		this.main = main;
@@ -58,6 +60,20 @@ public class ZoznamHotelov implements ZlozkaHotel{
     	}
 		return sprava;
 	}
+	public String financieVypis(int pocetDni){
+		   String sprava="Hotely:\n";
+		   for(Hotel z: HotelyZ= dostanHotel()){
+	    		sprava +=z.financieVypis(pocetDni);
+	    	}
+		   return sprava;
+	   }
+	public String financieVypis(int pocetDni,String m){
+		   String sprava="Hotely:\n";
+		   for(Hotel z: HotelyZ= dostanHotel()){
+	    		sprava +=z.financieVypis(pocetDni,m);
+	    	}
+		   return sprava;
+	   }
 	
 		
 	public List<Hotel> dostanHotel() {
@@ -65,6 +81,21 @@ public class ZoznamHotelov implements ZlozkaHotel{
 		for(ZlozkaHotel z: hotely){
 			n.addAll(z.dostanHotel());
 		}		return n;
+	}
+	public double getSuma(int pocetDni){
+		double sum=0;
+		for(Hotel z: HotelyZ= dostanHotel()){
+    		sum += z.getSuma(pocetDni);
+    	}
+		return sum;
+	}
+
+	public boolean isCakam() {
+		return cakam;
+	}
+
+	public void setCakam(boolean cakam) {
+		this.cakam = cakam;
 	}
 
 	

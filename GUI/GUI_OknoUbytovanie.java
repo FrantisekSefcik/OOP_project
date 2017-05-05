@@ -29,6 +29,7 @@ public class GUI_OknoUbytovanie extends Stage {
 	private Button ubytuj_h;
 	private Button vypis_hlavny;
 	private Button spat_v;
+	private Button schval;
 	
 	private TextField meno_h;
 	private TextField cislou_h;
@@ -37,6 +38,7 @@ public class GUI_OknoUbytovanie extends Stage {
 	private TextField lozka_i;
 	private TextField cislo_i;
 	private TextField cena_i;
+	private TextField sprava;
 	
 	private Label popis_h1;
 	private Label meno_hlb;
@@ -81,11 +83,13 @@ public class GUI_OknoUbytovanie extends Stage {
 			    grid_h.add(vypis_s,3,0);
 			    vypis_s.setMaxSize(250, 100);
 			    vypis_s.setText(sports.spravaSHotel());	
-			    grid_h.add(ubytuj_h = new Button("Prirad ubytovanie") ,3,1);
+			   // grid_h.add(ubytuj_h = new Button("Prirad ubytovanie") ,3,1);
 			    grid_h.add(vypis_hlavny = new Button("Vypis"), 3, 2);
 			    grid_h.add(miesto = new Label("Miesto konania: "+main.getMiestoKonania()) ,2,2);
 			    grid_h.add(prichod = new Label("Od "+main.getDatum1()) ,2,3);
 			    grid_h.add(odchod = new Label("Do "+main.getDatum2()) ,2,4);
+			    grid_h.add(sprava = new TextField("Nesplnene"), 1, 2);
+			    grid_h.add(schval = new Button("Schval"), 1, 3);
 			    
 			    
 			    
@@ -132,16 +136,24 @@ public class GUI_OknoUbytovanie extends Stage {
 			    ////////////////////////////////////////////////////////////////////////////////////
 			    //////Buttons
 			    pridaj_h.setOnAction(e-> this.setScene(scene_h));
-			    pridaj_h2.setOnAction(e-> {if(hotels.existHotel(meno_h.getText())){}else{hotels.pridajHotel(meno_h.getText(), adresa_m.getText(), adresa_u.getText(), Integer.parseInt(cislou_h.getText()));
-			    adresa_m.clear();adresa_u.clear();cislou_h.clear();}});
-			    end_h.setOnAction(e-> {this.setScene(scene1);vypis_h.setText(hotels.vypisHotelov());vypis_s.clear();vypis_s.setText(sports.spravaSHotel());});
+			    pridaj_h2.setOnAction(e-> {try{if(hotels.existHotel(meno_h.getText())){}else{hotels.pridajHotel(meno_h.getText(), adresa_m.getText(), adresa_u.getText(), Integer.parseInt(cislou_h.getText()));
+			    adresa_m.clear();adresa_u.clear();cislou_h.clear();}
+			    }catch(Exception xe){
+					new GUI_error("Nespravny vstup");
+				}});
+			    end_h.setOnAction(e-> {this.setScene(scene1);vypis_h.setText(hotels.vypisHotelov());vypis_s.clear();vypis_s.setText(sports.spravaSHotel());
+			    if(sports.isUbytovanieSplnene()){sprava.setText("Splnene");}else{sprava.setText("Nesplnene");} });
 			    pridajIzbu_h.setOnAction(e->{if(hotels.existHotel(meno_h.getText())){hotels.vyhladajHotel(meno_h.getText());this.setScene(scene_i);}});
-			    pridaj_i.setOnAction(e->{ hotels.pridajIzbu(Integer.parseInt(lozka_i.getText()), Integer.parseInt(cislo_i.getText()), Double.parseDouble(cena_i.getText()));
-			    cislo_i.clear();});
+			    pridaj_i.setOnAction(e->{ try{hotels.pridajIzbu(Integer.parseInt(lozka_i.getText()), Integer.parseInt(cislo_i.getText()), Double.parseDouble(cena_i.getText()));
+			    cislo_i.clear();
+			    }catch(Exception xe){
+					new GUI_error("Nespravny vstup");
+				}});
 			    end_i.setOnAction(e-> this.setScene(scene_h));
-			    ubytuj_h.setOnAction(e-> {hotels.priradUbytovanie();vypis_s.clear();vypis_s.setText(sports.spravaSHotel());});
+			  //  ubytuj_h.setOnAction(e-> {hotels.priradUbytovanie();vypis_s.clear();vypis_s.setText(sports.spravaSHotel());});
 			    vypis_hlavny.setOnAction(e->{this.setScene(scene_v);vypis.setText(sports.vypisHotel());});
 			    spat_v.setOnAction(e->{this.setScene(scene1);});
+			    schval.setOnAction(e->{if(sports.isUbytovanieSplnene()){if(sports.isSchvalUbytovanie()){this.close();}else{hotels.setCakam(true);sprava.setText("Cakam na schvalenie");}}else{ new GUI_error("Neboli este splnene poziadavky");}});
 			    
 			    
 			    /////Buttons

@@ -16,6 +16,11 @@ public class Cesta {
 		this.prostriedok = p;
 		freeMiesta= prostriedok.getPocetMiest();
 	}
+	
+	public boolean isFree(){
+		return pasazieri.isEmpty();
+	}
+	
 	public void sparuj(Sport sport,String typ){
 		switch (typ) {
 		case "Tam":
@@ -44,6 +49,10 @@ public class Cesta {
 	}
 	public int getFreeMiesta(){
 		return freeMiesta;
+	}
+	public String getMenoProstriedku(){
+		return prostriedok.getMenoProstriedku();
+		
 	}
 	
 }
